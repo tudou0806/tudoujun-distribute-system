@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package com.tudoujun.distribute.common.proto;
+
+option java_multiple_files = true;
+option java_package = "com.tudoujun.distribute.model.namenode";
+
+message ControllerVote {
+  int32 voterNodeId = 1;
+  int32 controllerNodeId = 2;
+  int32 voteRound = 3;
+  bool force = 4;
+}
+
+message NameNodeAwareRequest {
+  int32 nameNodeId = 1;
+  int32 numOfNode = 2;
+  string server = 3;
+  repeated string servers = 4;
+  bool isClient = 5;
+}

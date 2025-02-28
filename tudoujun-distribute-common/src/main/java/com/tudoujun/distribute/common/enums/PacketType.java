@@ -15,6 +15,8 @@ import lombok.Getter;
 public enum PacketType {
 
     UNKNOWN(0, "未知的包类型"),
+    NAME_NODE_CONTROLLER_VOTE(19, "NameNode投票选举的票据"),
+    NAME_NODE_PEER_AWARE(20, "NameNode相互之间发起连接时的感知请求"),
     ;
 
     private final Integer value;
