@@ -10,11 +10,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 import com.tudoujun.distribute.common.NettyPacket;
 import com.tudoujun.distribute.common.enums.PacketType;
 import com.tudoujun.distribute.common.network.RequestWrapper;
+import com.tudoujun.distribute.common.utils.DefaultScheduler;
 import com.tudoujun.distribute.common.utils.NetUtils;
 import com.tudoujun.distribute.model.namenode.ControllerVote;
 import com.tudoujun.distribute.model.namenode.NameNodeAwareRequest;
 import com.tudoujun.distribute.namenode.config.NameNodeConfig;
 import com.tudoujun.distribute.namenode.shard.peer.PeerNameNode;
+import com.tudoujun.distribute.namenode.shard.peer.PeerNameNodeClient;
 import com.tudoujun.distribute.namenode.shard.peer.PeerNameNodes;
 
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +40,20 @@ public class ControllerManager {
     private AtomicBoolean isForeController = new AtomicBoolean(false);
     private AtomicInteger voteRound = new AtomicInteger(0);
     private AtomicBoolean startControllerElection = new AtomicBoolean(false);
+
+    public ControllerManager(NameNodeConfig nameNodeConfig,
+                             PeerNameNodes peerNameNodes) {
+        this.nameNodeConfig = nameNodeConfig;
+        this.peerNameNodes = peerNameNodes;
+        this.peerNameNodes.setControllerManager(this);
+        this.numOfNode = new AtomicInteger(nameNodeConfig.numOfNode());
+        this.currentVote = ControllerVote.newBuilder()
+                .setVoterNodeId(nameNodeConfig.getNameNodeId())
+                .setControllerNodeId(nameNodeConfig.getNameNodeId())
+                .setVoteRound(voteRound.get())
+                .setForce(false)
+                .build();
+    }
 
     /**
      * 上报自身节点信息给其它PeerNameNode

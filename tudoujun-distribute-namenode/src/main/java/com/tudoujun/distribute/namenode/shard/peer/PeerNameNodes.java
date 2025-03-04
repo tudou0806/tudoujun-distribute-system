@@ -124,7 +124,7 @@ public class PeerNameNodes {
     }
 
     public List<Integer> broadcast(NettyPacket nettyPacket, Integer excludeNodeId) {
-        return broadcast(nettyPacket, new HashSet<>(excludeNodeId));
+        return broadcast(nettyPacket, new HashSet<>(Collections.singletonList(excludeNodeId)));
     }
 
     /**

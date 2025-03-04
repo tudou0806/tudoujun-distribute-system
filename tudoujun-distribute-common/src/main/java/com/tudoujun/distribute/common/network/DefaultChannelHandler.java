@@ -8,6 +8,7 @@ import java.util.Set;
 import com.tudoujun.distribute.common.NettyPacket;
 import com.tudoujun.distribute.common.exception.RequestTimeoutException;
 import com.tudoujun.distribute.common.utils.DefaultScheduler;
+import com.tudoujun.distribute.common.utils.NetUtils;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.socket.SocketChannel;
@@ -68,7 +69,7 @@ public class DefaultChannelHandler extends AbstractChannelHandler {
         socketChannel = (SocketChannel)ctx.channel();
         syncRequestSupport.setSocketChannel(socketChannel);
         invokeConnectListener(true);
-        log.debug("Socket channel is connected. {}", socketChannel.id().asLongText());
+        log.debug("Socket channel is connected. {}", NetUtils.getChannelId(ctx.channel()));
         ctx.fireChannelActive();
     }
 
@@ -77,7 +78,7 @@ public class DefaultChannelHandler extends AbstractChannelHandler {
         socketChannel = null;
         syncRequestSupport.setSocketChannel(null);
         invokeConnectListener(false);
-        log.debug("Socket channel is disconnected. {}", socketChannel.id().asLongText());
+        log.debug("Socket channel is disconnected. {}", NetUtils.getChannelId(ctx.channel()));
         ctx.fireChannelInactive();
     }
 
